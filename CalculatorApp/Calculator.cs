@@ -1,7 +1,15 @@
+using Microsoft.Extensions.Logging;
+
 namespace CalculatorApp;
 
 public class Calculator
 {
+    private readonly ILogger<Calculator> _logger;
+
+    public Calculator(ILogger<Calculator> logger)
+    {
+        _logger = logger;
+    }
     public double PerformOperation(double num1, double num2, string operation)
     {
         return operation switch

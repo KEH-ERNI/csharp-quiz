@@ -1,9 +1,12 @@
-﻿namespace CalculatorApp;
+﻿using Microsoft.Extensions.Logging;
+
+namespace CalculatorApp;
 
 public class Program
 {
     static void Main(string[] args)
     {
+        var logger = LoggerProvider.CreateLogger<Program>();
         try
         {
             double num1 = ReadDouble("Enter the first number:");
@@ -12,22 +15,22 @@ public class Program
             Console.WriteLine("Enter the operation (add, subtract, multiply, divide):");
             string operation = Console.ReadLine()?.ToLower() ?? string.Empty;
 
-            var calculator = new Calculator();
+            var calculator = new Calculator(LoggerProvider.CreateLogger<Calculator>());
             double result = calculator.PerformOperation(num1, num2, operation);
             Console.WriteLine($"The result is: {result}");
 
         }
         catch (FormatException) // Invalid Input (non-numeric value in any number)
         {
-            Console.WriteLine("Invalid input. Please enter numeric values.");
+            logger.LogError("Invalid input. Please enter numeric values.");
         }
         catch (Exception ex) // Overall exception
         {
-            Console.WriteLine($"{ex.Message}");
+            logger.LogError($"{ex.Message}");
         }
         finally
         {
-            Console.WriteLine("Calculation attempt finished.");
+            logger.LogInformation("Calculation attempt finished.");
         }
 
     }
